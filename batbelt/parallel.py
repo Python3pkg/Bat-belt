@@ -9,7 +9,7 @@
 import threading
 import multiprocessing
 from functools import wraps
-from Queue import Queue, Empty
+from queue import Queue, Empty
 
 __all__ = ['process', 'thread']
 

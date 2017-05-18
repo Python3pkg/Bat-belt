@@ -18,7 +18,7 @@ def chunks(seq, chunksize, process=tuple):
     """
     it = iter(seq)
     while True:
-        yield process(chain([it.next()], islice(it, chunksize - 1)))
+        yield process(chain([next(it)], islice(it, chunksize - 1)))
 
 
 
@@ -52,7 +52,7 @@ def dmerge(d1, d2, merge_func=None):
         d.update(d2)
         return d
 
-    for k, v in d2.iteritems():
+    for k, v in d2.items():
         if k in d:
             d[k] = merge_func(d[k], v)
         else:
@@ -75,7 +75,7 @@ def dswap(dct):
             >>> sorted(dswap({'a': 1, 'b': 2}).items())
             [(1, 'a'), (2, 'b')]
     """
-    return dict((value, key) for key, value in dct.iteritems())
+    return dict((value, key) for key, value in dct.items())
 
 
 def get(data, *keys, **kwargs):
@@ -189,9 +189,9 @@ def subdict(dct, include=(), exclude=()):
     """
 
     if include:
-        return dict((k, v) for k, v in dct.iteritems() if k in include)
+        return dict((k, v) for k, v in dct.items() if k in include)
 
-    return dict((k, v) for k, v in dct.iteritems() if k not in exclude)
+    return dict((k, v) for k, v in dct.items() if k not in exclude)
 
 
 
@@ -381,7 +381,7 @@ def remove_duplicates(lst, equals=lambda x, y: x == y):
 
 
 
-KEY, PREV, NEXT = range(3)
+KEY, PREV, NEXT = list(range(3))
 
 
 class sset(MutableSet):

@@ -60,7 +60,7 @@ import unicodedata
 from datetime import datetime, timedelta, date, time
 from xml.sax.saxutils import escape, unescape
 
-from utils import CLASSIC_DATETIME_FORMAT, CLASSIC_DATETIME_PATTERN
+from .utils import CLASSIC_DATETIME_FORMAT, CLASSIC_DATETIME_PATTERN
 
 
 
@@ -81,7 +81,7 @@ def unicode_slugify(string, separator=r'-'):
 
     string = re.sub(r'[^\w\s' + separator + ']', '', string, flags=re.U)
     string = string.strip().lower()
-    return unicode(re.sub(r'[' + separator + '\s]+',
+    return str(re.sub(r'[' + separator + '\s]+',
                    separator, string, flags=re.U))
 
 
@@ -101,7 +101,7 @@ def unicodedata_slugify(string, separator=r'-'):
 
     string = unicodedata.normalize('NFKD', string).encode('ascii', 'ignore')
     string = re.sub(r'[^\w\s' + separator + ']', '', string).strip().lower()
-    return unicode(re.sub(r'[' + separator + '\s]+', separator, string))
+    return str(re.sub(r'[' + separator + '\s]+', separator, string))
 
 
 def unidecode_slugify(string, separator=r'-'):
@@ -120,7 +120,7 @@ def unidecode_slugify(string, separator=r'-'):
 
     string = unidecode.unidecode(string)
     string = re.sub(r'[^\w\s' + separator + ']', '', string).strip().lower()
-    return unicode(re.sub(r'[' + separator + '\s]+', separator, string))
+    return str(re.sub(r'[' + separator + '\s]+', separator, string))
 
 
 def unicodedata_normalize(string):
@@ -270,7 +270,7 @@ class JSONDecoder(json.JSONDecoder):
             parse it and returns a Python object.
         """
 
-        string = unicode(obj)
+        string = str(obj)
 
         match = re.search(self.datetime_pattern, string)
         if match:
@@ -418,7 +418,7 @@ def write(path, *args, **kwargs):
             if isinstance(line, str):
                 line = line.decode(encoding, errors)
 
-            if not isinstance(line, unicode):
+            if not isinstance(line, str):
                 line = repr(line)
 
             f.write(line + os.linesep)
