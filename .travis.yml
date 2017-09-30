@@ -1,0 +1,55 @@
+os:
+  - linux
+python:
+  - "2.7"
+  - "3.6"
+  - "nightly" # currently points to 3.7-dev
+
+dist: trusty
+sudo: required
+language: python
+
+
+before_install:
+  # Show build setup
+  - uname -a
+  - cat /etc/os-release
+  - pwd
+  - free -tm
+  - python --version
+  - git --version
+  - pip install -r requirements.txt
+
+install:
+  # git describe requires complete history
+  # - travis_retry git fetch --unshallow
+  - python setup.py install
+  # - pytest > test.log
+  # - cat test.log
+
+script: 
+  - python helpTest.py | grep AllTheDots
+  
+after_success:
+  - echo "OK, all done."
+
+notifications:
+  email:
+    recipients:
+      - ralic.lo.eng@ieee.org
+    on_success: always # default: change
+    on_failure: never # default: always
+
+before_deploy:
+  - pip install gitchangelog
+  - gitchangelog >> README.rst
+  
+deploy:
+  provider: pypi
+  user: cjrk
+  password:
+    secure: dqR5LrQgQ4xmWOJCpyvaTFXg7Q35yI5gw6yJypA90Pmz+R3pHLhiq2+3uOeYFIDQoe6CzcwPh1Uvu2SQV3PdDhB1ZjbccsWQQ9WOF4kOkt0ZUoyQlDB+VwiO/nEpjFze7n4VZFFtEVSwd1wmkEAmwDxl5iFvOqDzVkFhDjn3Abp+yZL28vofYaDuwFjCCRPY5L6CQUAE73JixeK7kQNRbIvNsRSZauxNEYPNd9ofdiyyiObY1haWsbVRxMMI+bvnuJWcnNromEEqBfsmsf4PrVZeO8kTRmVYmGhHx87b/OGOkjIMadxAm8tmgh2wjkJuGq+th/Gt7A2CD1H90h85RbRVNwxgU/QJh7ehNsLIMJaJ0iXD3qvQXtpz1YWY/O+Q6I8inaWjU58z2dbdNFShq2NflLNn9ls4k4RmIMn78SI0QzhCYC9FFBYLXe92x3mqonD3zYXc09Z1p7kzqXu6mhGwpk77qK+AIJIwnHE98VgD5UMnfBtxAF0qZ3HGGfWm0gonGRHIhKTccAl/bQ3aLtrAYEm29RMK4TXw5DZI6n/ODLMqXH7RBwE89hUoeVyNg1zNxdka7reDrymI4hJYzhTMljEGS5SUWyo3OZmheJlJ6FUIQiULpNhO8NusLXilknzSMGaHNdiVwklw5Vrs7cDHWx1oxokGWIIW7Y6ZJlk=
+  on:
+    tags: true
+    repo: Python3pkg/AllTheDots
+
