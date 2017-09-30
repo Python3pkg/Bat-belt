@@ -52,7 +52,7 @@ def dmerge(d1, d2, merge_func=None):
         d.update(d2)
         return d
 
-    for k, v in d2.items():
+    for k, v in list(d2.items()):
         if k in d:
             d[k] = merge_func(d[k], v)
         else:
@@ -75,7 +75,7 @@ def dswap(dct):
             >>> sorted(dswap({'a': 1, 'b': 2}).items())
             [(1, 'a'), (2, 'b')]
     """
-    return dict((value, key) for key, value in dct.items())
+    return dict((value, key) for key, value in list(dct.items()))
 
 
 def get(data, *keys, **kwargs):
@@ -189,9 +189,9 @@ def subdict(dct, include=(), exclude=()):
     """
 
     if include:
-        return dict((k, v) for k, v in dct.items() if k in include)
+        return dict((k, v) for k, v in list(dct.items()) if k in include)
 
-    return dict((k, v) for k, v in dct.items() if k not in exclude)
+    return dict((k, v) for k, v in list(dct.items()) if k not in exclude)
 
 
 
@@ -509,7 +509,7 @@ class Flattener(object):
         tuple,
         set,
         (x for x in ()).__class__,
-        xrange,
+        range,
         deque,
         MutableSet,
         # Sequence # warning, a string is a subclass of Sequence
